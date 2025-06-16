@@ -1,8 +1,8 @@
 # This file is intentionally left empty as we're using a real Redis instance during build
 # The Redis configuration is handled by environment variables 
 
-# Skip Redis initialization during asset precompilation
-if ENV['RAILS_ENV'] == 'production' && ENV['ASSET_PRECOMPILE'] == 'true'
+# Skip Redis initialization during asset precompilation and build
+if ENV['RAILS_ENV'] == 'production' && (ENV['ASSET_PRECOMPILE'] == 'true' || ENV['BUILD'] == 'true')
   # Create a mock Redis client that returns nil for all operations
   class MockRedis
     def get(*args)
