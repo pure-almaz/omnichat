@@ -2,7 +2,7 @@
 # The Redis configuration is handled by environment variables 
 
 # Skip Redis initialization during asset precompilation
-if ENV['RAILS_ENV'] == 'production' && defined?(Rake) && Rake.application.top_level_tasks.include?('assets:precompile')
+if ENV['RAILS_ENV'] == 'production' && ENV['ASSET_PRECOMPILE'] == 'true'
   # Create a mock Redis client that returns nil for all operations
   class MockRedis
     def get(*args)

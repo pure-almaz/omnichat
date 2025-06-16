@@ -3,6 +3,7 @@ FROM ruby:3.3.3 as builder
 # Set environment variables first
 ENV RAILS_ENV=production
 ENV SECRET_KEY_BASE=73f123eee412a73f4a06d15c4f1b57feb4a0350f452332aba37393f0f53a19c447e59824b9d2f43a3b210520f60e4936fbe4cdbec16b54e435a61769211de301
+ENV ASSET_PRECOMPILE=true
 
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y \
@@ -88,6 +89,9 @@ RUN mkdir -p log tmp/pids tmp/sockets
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
 ENV INSTALLATION_ENV=docker
+
+# Expose port 3000
+EXPOSE 3000
 
 # Start the application
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"] 
