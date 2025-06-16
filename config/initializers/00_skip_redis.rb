@@ -1,20 +1,27 @@
 # Skip Redis initialization during build
 if ENV['SKIP_REDIS_INITIALIZATION'] == 'true'
-  module Redis
-    class Client
-      def initialize(*args)
-        # Do nothing during build
-      end
+  # Monkey patch the Redis client to prevent actual connections
+  class Redis::Client
+    alias_method :original_connect, :connect
+    def connect
+      # Do nothing during build
+      @sock = nil
     end
   end
 
-  module ConnectionPool
+  # Monkey patch the connection pool to return a mock pool
+  class ConnectionPool
+    alias_method :original_new, :new
     def self.new(*args)
-      # Return a mock pool during build
-      Object.new.tap do |pool|
-        def pool.with
-          yield nil
+      if ENV['SKIP_REDIS_INITIALIZATION'] == 'true'
+        # Return a mock pool during build
+        Object.new.tap do |pool|
+          def pool.with
+            yield nil
+          end
         end
+      else
+        original_new(*args)
       end
     end
   end
