@@ -1,6 +1,6 @@
 {
   "LOGIN": {
-    "TITLE": "Logga in till Chatwoot",
+    "TITLE": "Logga in till OmniChat",
     "EMAIL": {
       "LABEL": "E-post",
       "PLACEHOLDER": "example{'@'}companyname.com",

@@ -1,6 +1,6 @@
 {
   "LOGIN": {
-    "TITLE": "Είσοδος στο Chatwoot",
+    "TITLE": "Είσοδος στο OmniChat",
     "EMAIL": {
       "LABEL": "Email",
       "PLACEHOLDER": "example{'@'}companyname.com",

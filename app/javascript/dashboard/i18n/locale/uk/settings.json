@@ -149,7 +149,7 @@
           "SLA_MISSED_NEXT_RESPONSE": "Розмова пропускає наступну відповідь SLA",
           "SLA_MISSED_RESOLUTION": "Розмова пропускає SLA розширення"
         },
-        "BROWSER_PERMISSION": "Enable push notifications for your browser so you’re able to receive them"
+        "BROWSER_PERMISSION": "Enable push notifications for your browser so you're able to receive them"
       },
       "API": {
         "UPDATE_SUCCESS": "Налаштування сповіщень для вашого акаунту оновлено успішно",
@@ -381,7 +381,7 @@
     "NO_BILLING_USER": "Ваш платіжний обліковий запис налаштовується. Будь ласка, оновіть сторінку та повторіть спробу."
   },
   "CREATE_ACCOUNT": {
-    "NO_ACCOUNT_WARNING": "Ой! Ми не змогли знайти жодного облікового запису Chatwoot. Будь ласка, створіть новий обліковий запис, щоб продовжити.",
+    "NO_ACCOUNT_WARNING": "Ой! Ми не змогли знайти жодного облікового запису OmniChat. Будь ласка, створіть новий обліковий запис, щоб продовжити.",
     "NEW_ACCOUNT": "Новий акаунт",
     "SELECTOR_SUBTITLE": "Створити новий обліковий запис",
     "API": {

@@ -138,3 +138,25 @@ Thanks goes to all these [wonderful people](https://www.chatwoot.com/docs/contri
 
 
 *Chatwoot* &copy; 2017-2025, Chatwoot Inc - Released under the MIT License.
+
+
+You are absolutely right—if none of your changes are taking effect, the best way to ensure a clean slate is to:
+Delete all containers, volumes, and networks (which we just did with docker compose down -v).
+Remove any precompiled assets, cache, and possibly node_modules, vendor, etc. from your project directory.
+Rebuild everything from scratch (including Docker images and assets).
+Here’s what you should do next for a truly fresh start:
+1. Remove all build artifacts and caches from your project directory:
+rm -rf tmp/*
+rm -rf public/assets/*
+rm -rf node_modules/
+rm -rf vendor/bundle
+rm -rf .vite (if present)
+rm -rf storage/* (if you want to clear uploaded files)
+
+2. Rebuild Docker images:
+docker compose build --no-cache
+3. Start containers:
+docker compose up -d
+4. (If needed) Run database setup/migrations:
+docker compose exec rails bundle exec rails db:setup
+

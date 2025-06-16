@@ -149,7 +149,7 @@
           "SLA_MISSED_NEXT_RESPONSE": "A conversation misses next response SLA",
           "SLA_MISSED_RESOLUTION": "A conversation misses resolution SLA"
         },
-        "BROWSER_PERMISSION": "Enable push notifications for your browser so you’re able to receive them"
+        "BROWSER_PERMISSION": "Enable push notifications for your browser so you're able to receive them"
       },
       "API": {
         "UPDATE_SUCCESS": "Vaše předvolby oznámení byly úspěšně aktualizovány",
@@ -381,7 +381,7 @@
     "NO_BILLING_USER": "Your billing account is being configured. Please refresh the page and try again."
   },
   "CREATE_ACCOUNT": {
-    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
+    "NO_ACCOUNT_WARNING": "Uh oh! We could not find any OmniChat accounts. Please create a new account to continue.",
     "NEW_ACCOUNT": "Nový účet",
     "SELECTOR_SUBTITLE": "Vytvořit nový účet",
     "API": {
