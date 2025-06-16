@@ -37,6 +37,11 @@ services:
           type: redis
           name: chatwoot-redis
           property: connectionString
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: chatwoot-redis
+          property: password
 
 databases:
   - name: chatwoot-db
@@ -46,4 +51,5 @@ databases:
 
 redis:
   - name: chatwoot-redis
-    plan: standard 
+    plan: standard
+    maxmemoryPolicy: noeviction 

@@ -10,9 +10,15 @@ module Redis::Config
     end
 
     def base_config
+      redis_url = ENV.fetch('REDIS_URL', 'redis://127.0.0.1:6379')
+      
+      # Parse Redis URL to extract password if present
+      uri = URI.parse(redis_url)
+      password = uri.password || ENV.fetch('REDIS_PASSWORD', nil)
+      
       {
-        url: ENV.fetch('REDIS_URL', 'redis://127.0.0.1:6379'),
-        password: ENV.fetch('REDIS_PASSWORD', nil).presence,
+        url: redis_url,
+        password: password.presence,
         ssl_params: { verify_mode: Chatwoot.redis_ssl_verify_mode },
         reconnect_attempts: 2,
         timeout: 1
