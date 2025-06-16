@@ -32,6 +32,12 @@ RUN bundle install
 # Copy the rest of the application
 COPY . .
 
+# Create necessary directories
+RUN mkdir -p log tmp/pids tmp/sockets
+
+# Set production environment for asset precompilation
+ENV RAILS_ENV=production
+
 # Precompile assets
 RUN bundle exec rails assets:precompile
 
