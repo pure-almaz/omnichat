@@ -38,6 +38,9 @@ RUN mkdir -p log tmp/pids tmp/sockets
 # Set production environment for asset precompilation
 ENV RAILS_ENV=production
 
+# Set the secret key base for asset precompilation
+ENV SECRET_KEY_BASE=73f123eee412a73f4a06d15c4f1b57feb4a0350f452332aba37393f0f53a19c447e59824b9d2f43a3b210520f60e4936fbe4cdbec16b54e435a61769211de301
+
 # Precompile assets
 RUN bundle exec rails assets:precompile
 
