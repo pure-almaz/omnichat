@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: chatwoot
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    healthCheckPath: /health
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: NODE_ENV
+        value: production
+      - key: INSTALLATION_ENV
+        value: docker
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: RAILS_MASTER_KEY
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://${SERVICE_NAME}.onrender.com
+      - key: BACKEND_URL
+        value: https://${SERVICE_NAME}.onrender.com
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: chatwoot-db
+          property: host
+      - key: POSTGRES_USERNAME
+        fromDatabase:
+          name: chatwoot-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: chatwoot-db
+          property: password
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: chatwoot-redis
+          property: connectionString
+
+databases:
+  - name: chatwoot-db
+    databaseName: chatwoot
+    user: chatwoot
+    plan: standard
+
+redis:
+  - name: chatwoot-redis
+    plan: standard 

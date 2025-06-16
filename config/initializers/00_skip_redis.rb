@@ -1,8 +1,8 @@
 # This file is intentionally left empty as we're using a real Redis instance during build
 # The Redis configuration is handled by environment variables 
 
-# Skip Redis initialization during asset precompilation and build
-if ENV['RAILS_ENV'] == 'production' && (ENV['ASSET_PRECOMPILE'] == 'true' || ENV['BUILD'] == 'true')
+# Skip Redis initialization during asset precompilation, build, and when Redis is unavailable
+if ENV['RAILS_ENV'] == 'production' && (ENV['ASSET_PRECOMPILE'] == 'true' || ENV['BUILD'] == 'true') || !ENV['REDIS_URL']
   # Create a mock Redis client that returns nil for all operations
   class MockRedis
     def get(*args)
@@ -43,6 +43,10 @@ if ENV['RAILS_ENV'] == 'production' && (ENV['ASSET_PRECOMPILE'] == 'true' || ENV
 
     def info
       {}
+    end
+
+    def method_missing(method, *args, &block)
+      nil
     end
   end
 
@@ -91,6 +95,10 @@ if ENV['RAILS_ENV'] == 'production' && (ENV['ASSET_PRECOMPILE'] == 'true' || ENV
     def info
       {}
     end
+
+    def method_missing(method, *args, &block)
+      nil
+    end
   end
 
   # Create a mock connection pool
@@ -101,6 +109,10 @@ if ENV['RAILS_ENV'] == 'production' && (ENV['ASSET_PRECOMPILE'] == 'true' || ENV
 
     def with
       yield MockNamespace.new
+    end
+
+    def method_missing(method, *args, &block)
+      nil
     end
   end
 

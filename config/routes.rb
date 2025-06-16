@@ -554,4 +554,7 @@ Rails.application.routes.draw do
   # ----------------------------------------------------------------------
   # Routes for testing
   resources :widget_tests, only: [:index] unless Rails.env.production?
+
+  # Health check endpoint
+  get 'health', to: proc { [200, {}, ['OK']] }
 end
