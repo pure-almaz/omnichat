@@ -1,5 +1,11 @@
 FROM ruby:3.3.3 as builder
 
+# Set environment variables first
+ENV RAILS_ENV=production
+ENV SKIP_REDIS_INITIALIZATION=true
+ENV SKIP_REDIS=true
+ENV SECRET_KEY_BASE=73f123eee412a73f4a06d15c4f1b57feb4a0350f452332aba37393f0f53a19c447e59824b9d2f43a3b210520f60e4936fbe4cdbec16b54e435a61769211de301
+
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y \
     build-essential \
@@ -34,20 +40,6 @@ COPY . .
 
 # Create necessary directories
 RUN mkdir -p log tmp/pids tmp/sockets
-
-# Set production environment for asset precompilation
-ENV RAILS_ENV=production
-
-# Set the secret key base for asset precompilation
-ENV SECRET_KEY_BASE=73f123eee412a73f4a06d15c4f1b57feb4a0350f452332aba37393f0f53a19c447e59824b9d2f43a3b210520f60e4936fbe4cdbec16b54e435a61769211de301
-
-# Skip Redis initialization during build
-ENV SKIP_REDIS_INITIALIZATION=true
-ENV REDIS_URL=redis://localhost:6379
-ENV REDIS_HOST=localhost
-ENV REDIS_PORT=6379
-ENV REDIS_PASSWORD=nil
-ENV REDIS_DB=0
 
 # Precompile assets
 RUN bundle exec rails assets:precompile
@@ -94,8 +86,13 @@ COPY --from=builder /app/public/packs /app/public/packs
 # Create necessary directories
 RUN mkdir -p log tmp/pids tmp/sockets
 
-# Expose port
-EXPOSE 3000
+# Set production environment
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+ENV INSTALLATION_ENV=docker
+
+# The Redis configuration will be set by the environment variables in production
+# No need to set mock Redis configuration here as it will be handled by the application
 
 # Start the application
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"] 

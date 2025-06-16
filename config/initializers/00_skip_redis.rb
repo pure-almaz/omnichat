@@ -1,41 +1,5 @@
 # Skip Redis initialization during build
-if ENV['SKIP_REDIS_INITIALIZATION'] == 'true'
-  # Create a mock Redis client that returns nil for all operations
-  class MockRedisClient
-    def get(*)
-      nil
-    end
-
-    def set(*)
-      true
-    end
-
-    def expire(*)
-      true
-    end
-
-    def keys(*)
-      []
-    end
-  end
-
-  # Create a mock connection pool that always returns the mock client
-  class MockConnectionPool
-    def initialize(*)
-      @client = MockRedisClient.new
-    end
-
-    def with
-      yield @client
-    end
-  end
-
-  # Replace the global Redis connections with mocks
-  $alfred = MockConnectionPool.new
-  $velma = MockConnectionPool.new
-end
-
-if ENV['RAILS_ENV'] == 'production' && ENV['SKIP_REDIS'] == 'true'
+if ENV['SKIP_REDIS_INITIALIZATION'] == 'true' || ENV['SKIP_REDIS'] == 'true'
   require 'redis'
   require 'redis-namespace'
   require 'connection_pool'
@@ -102,6 +66,14 @@ if ENV['RAILS_ENV'] == 'production' && ENV['SKIP_REDIS'] == 'true'
     def close
       true
     end
+
+    def ping
+      'PONG'
+    end
+
+    def info
+      {}
+    end
   end
 
   # Mock Redis::Namespace
@@ -141,6 +113,14 @@ if ENV['RAILS_ENV'] == 'production' && ENV['SKIP_REDIS'] == 'true'
     def close
       true
     end
+
+    def ping
+      'PONG'
+    end
+
+    def info
+      {}
+    end
   end
 
   # Mock ConnectionPool
@@ -157,5 +137,14 @@ if ENV['RAILS_ENV'] == 'production' && ENV['SKIP_REDIS'] == 'true'
   # Override Redis.new to return our mock
   def Redis.new(*args)
     Redis::Namespace.new('chatwoot', redis: Redis.new)
+  end
+
+  # Replace the global Redis connections with mocks
+  $alfred = ConnectionPool.new(size: 5, timeout: 1) do
+    Redis::Namespace.new('alfred', redis: Redis.new)
+  end
+
+  $velma = ConnectionPool.new(size: 5, timeout: 1) do
+    Redis::Namespace.new('velma', redis: Redis.new)
   end
 end 
