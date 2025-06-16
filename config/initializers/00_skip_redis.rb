@@ -4,33 +4,8 @@ if ENV['SKIP_REDIS_INITIALIZATION'] == 'true' || ENV['SKIP_REDIS'] == 'true'
   require 'redis-namespace'
   require 'connection_pool'
 
-  # Mock the Redis client at the lowest level
-  module RedisClient
-    class RubyConnection
-      def initialize(*args)
-        # Do nothing, prevent actual connection
-      end
-
-      def connect
-        # Do nothing, prevent actual connection
-      end
-
-      def connected?
-        true
-      end
-
-      def disconnect
-        # Do nothing
-      end
-
-      def call_v(command)
-        nil
-      end
-    end
-  end
-
-  # Mock Redis class
-  class Redis
+  # Create a mock Redis instance
+  class MockRedis
     def initialize(*args)
       # Do nothing
     end
@@ -76,8 +51,8 @@ if ENV['SKIP_REDIS_INITIALIZATION'] == 'true' || ENV['SKIP_REDIS'] == 'true'
     end
   end
 
-  # Mock Redis::Namespace
-  class Redis::Namespace
+  # Create a mock namespace
+  class MockNamespace
     def initialize(*args)
       # Do nothing
     end
@@ -123,28 +98,38 @@ if ENV['SKIP_REDIS_INITIALIZATION'] == 'true' || ENV['SKIP_REDIS'] == 'true'
     end
   end
 
-  # Mock ConnectionPool
-  class ConnectionPool
+  # Create a mock connection pool
+  class MockPool
     def initialize(*args)
       # Do nothing
     end
 
     def with
-      yield Redis.new
+      yield MockNamespace.new
     end
   end
 
-  # Override Redis.new to return our mock
-  def Redis.new(*args)
-    Redis::Namespace.new('chatwoot', redis: Redis.new)
-  end
-
   # Replace the global Redis connections with mocks
-  $alfred = ConnectionPool.new(size: 5, timeout: 1) do
-    Redis::Namespace.new('alfred', redis: Redis.new)
+  $alfred = MockPool.new
+  $velma = MockPool.new
+
+  # Override Redis.new to return our mock
+  class Redis
+    class << self
+      alias_method :original_new, :new
+      def new(*args)
+        MockRedis.new
+      end
+    end
   end
 
-  $velma = ConnectionPool.new(size: 5, timeout: 1) do
-    Redis::Namespace.new('velma', redis: Redis.new)
+  # Override Redis::Namespace.new to return our mock
+  class Redis::Namespace
+    class << self
+      alias_method :original_new, :new
+      def new(*args)
+        MockNamespace.new
+      end
+    end
   end
 end 
