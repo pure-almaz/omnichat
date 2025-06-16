@@ -10,9 +10,9 @@ if ENV['SKIP_REDIS_INITIALIZATION'] == 'true'
   end
 
   # Monkey patch the connection pool to return a mock pool
-  class ConnectionPool
+  class << ConnectionPool
     alias_method :original_new, :new
-    def self.new(*args)
+    def new(*args)
       if ENV['SKIP_REDIS_INITIALIZATION'] == 'true'
         # Return a mock pool during build
         Object.new.tap do |pool|
